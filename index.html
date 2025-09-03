@@ -22,12 +22,14 @@
       height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px; /* jarak antar elemen */
+      align-items: flex-start;   /* geser konten ke kiri */
+      justify-content: center;   /* tetap di tengah secara vertikal */
+      gap: 20px;
+      margin-left: 200px;         /* jarak dari tepi kiri */
     }
 
     .title img {
+      margin-left: 50px;
       width: 500px;
       animation: float 2s infinite ease-in-out; 
     }
@@ -42,6 +44,8 @@
     }
 
     .start-button img {
+      margin-left: 200px; 
+      margin-top: -80px;
       width: 200px;
       cursor: pointer;
       transition: transform 0.3s ease, opacity 0.3s ease;
