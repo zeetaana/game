@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Game Makan Sehat - Level 2</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('asset/bg_dapur.png') no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+    #homeBtn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 20;
+    }
+    #instruction {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255,255,255,0.9);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      width: 320px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      z-index: 30;
+    }
+    #instruction button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #gameArea {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+    #boy {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 500px;
+      z-index: 5;
+    }
+    #table {
+      position: absolute;
+      top: 400px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      z-index: 10;
+    }
+    /* Tray makanan */
+    #foodTray {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      width: 320px;
+      overflow: hidden;
+      z-index: 15;
+    }
+    .food {
+      width: 90px;
+      height: 90px;
+      cursor: grab;
+      user-select: none;
+      flex-shrink: 0;
+    }
+    #trayControls {
+      position: absolute;
+      bottom: 120px;
+      width: 100%;
+      text-align: center;
+      z-index: 16;
+    }
+    #trayControls button {
+      margin: 0 250px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #popup {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      z-index: 50;
+    }
+    #popup img {
+      width: 120px;
+      margin-bottom: 10px;
+    }
+    #popup button {
+      margin: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<button id="homeBtn" onclick="window.location.href='level.html'">🏠 Home</button>
+
+<div id="instruction">
+  <h3>Cara Bermain</h3>
+  <p>Geser makanan sehat ke anak laki-laki.<br>
+     Kumpulkan <b>3 makanan sehat</b> untuk menang.<br>
+     Jika memberi makanan tidak sehat → kalah.</p>
+  <button id="startBtn">Mulai</button>
+</div>
+
+<div id="gameArea">
+  <!-- Anak laki-laki -->
+  <img id="boy" src="asset/lapar.png" alt="Anak Laki-Laki">
+
+  <!-- Meja -->
+  <img id="table" src="asset/meja.png" alt="Meja">
+
+  <!-- Tray makanan (hanya tampil 3) -->
+  <div id="foodTray"></div>
+  <div id="trayControls">
+    <button id="prevBtn">⬅</button>
+    <button id="nextBtnTray">➡</button>
+  </div>
+
+  <div id="popup">
+    <img id="popupImg" src="" alt="">
+    <h3 id="popupMsg"></h3>
+    <button id="retryBtn">Coba Lagi</button>
+    <button id="nextBtn" style="display:none;">Lanjut Level</button>
+  </div>
+</div>
+
+<script>
+  let score = 0;
+  let gameOver = false;
+  
+  let foodsData = [
+    {src:"asset/soup.png", type:"healthy"},
+    {src:"asset/burger.png", type:"unhealthy"},
+    {src:"asset/buah.png", type:"healthy"},
+    {src:"asset/pizza.png", type:"unhealthy"},
+    {src:"asset/hotdog.png", type:"unhealthy"},
+    {src:"asset/salmon.png", type:"healthy"}
+  ];
+  
+  let trayIndex = 0;
+  const tray = document.getElementById("foodTray");
+  
+  function renderTray() {
+    tray.innerHTML = "";
+    let visibleFoods = foodsData.slice(trayIndex, trayIndex+3);
+    visibleFoods.forEach((food, index) => {
+      let img = document.createElement("img");
+      img.src = food.src;
+      img.className = "food";
+      img.dataset.type = food.type;
+      img.dataset.index = trayIndex + index; // simpan index asli
+      tray.appendChild(img);
+      makeDraggable(img);
+    });
+  }
+  
+  document.getElementById("prevBtn").onclick = () => {
+    if (trayIndex > 0) {
+      trayIndex--;
+      renderTray();
+    }
+  };
+  document.getElementById("nextBtnTray").onclick = () => {
+    if (trayIndex < foodsData.length-3) {
+      trayIndex++;
+      renderTray();
+    }
+  };
+  
+  document.getElementById("startBtn").onclick = () => {
+    document.getElementById("instruction").style.display = "none";
+    document.getElementById("gameArea").style.display = "block";
+    renderTray();
+  };
+  
+  let boy = document.getElementById("boy");
+  
+  function makeDraggable(food) {
+    food.ondragstart = () => false;
+  
+    let shiftX, shiftY;
+  
+    food.addEventListener("mousedown", (e) => {
+      shiftX = e.clientX - food.getBoundingClientRect().left;
+      shiftY = e.clientY - food.getBoundingClientRect().top;
+  
+      food.style.position = "absolute";
+      food.style.zIndex = 1000;
+      document.body.append(food);
+  
+      moveAt(e.pageX, e.pageY);
+  
+      function moveAt(pageX, pageY) {
+        food.style.left = pageX - shiftX + "px";
+        food.style.top = pageY - shiftY + "px";
+      }
+  
+      function onMouseMove(ev) {
+        moveAt(ev.pageX, ev.pageY);
+      }
+  
+      document.addEventListener("mousemove", onMouseMove);
+  
+      food.addEventListener("mouseup", function onMouseUp(ev) {
+        document.removeEventListener("mousemove", onMouseMove);
+        food.removeEventListener("mouseup", onMouseUp);
+  
+        let boyRect = boy.getBoundingClientRect();
+        let foodRect = food.getBoundingClientRect();
+  
+        if (
+          foodRect.left < boyRect.right &&
+          foodRect.right > boyRect.left &&
+          foodRect.top < boyRect.bottom &&
+          foodRect.bottom > boyRect.top
+        ) {
+          if (gameOver) return;
+  
+          // Ambil index makanan dari dataset
+          let indexToRemove = parseInt(food.dataset.index);
+          foodsData.splice(indexToRemove, 1); // hapus dari array
+          if (trayIndex > foodsData.length - 3) {
+            trayIndex = Math.max(0, foodsData.length - 3); // sesuaikan trayIndex
+          }
+  
+          food.remove(); // hapus elemen dari DOM
+          renderTray(); // render ulang tray agar makanan bergeser
+  
+          if (food.dataset.type === "healthy") {
+            score++;
+            boy.src = "asset/anak_laki.png";
+  
+            if (score === 3) {
+              gameOver = true;
+              setTimeout(() => {
+                showPopup("Selamat! Kamu menang!", true);
+              }, 300);
+            }
+          } else {
+            gameOver = true;
+            setTimeout(() => {
+              showPopup("Kamu kalah! Silakan coba lagi.", false);
+            }, 300);
+          }
+        } else {
+          // Gagal drop, kembalikan ke tray
+          tray.appendChild(food);
+          food.style.position = "static";
+          food.style.zIndex = 15;
+        }
+      });
+    });
+  }
+  
+  function showPopup(message, win) {
+    let popup = document.getElementById("popup");
+    let msg = document.getElementById("popupMsg");
+    let img = document.getElementById("popupImg");
+    let nextBtn = document.getElementById("nextBtn");
+  
+    msg.textContent = message;
+    popup.style.display = "block";
+  
+    if (win) {
+      img.src = "asset/anak_laki.png";
+      nextBtn.style.display = "inline-block";
+      localStorage.setItem("level2Completed", "true");
+    } else {
+      img.src = "asset/tambah_lapar.png";
+      nextBtn.style.display = "none";
+    }
+  }
+  
+  document.getElementById("retryBtn").onclick = () => {
+    location.reload();
+  };
+  document.getElementById("nextBtn").onclick = () => {
+    window.location.href = "level.html";
+  };
+  </script>
+  
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Dialog Game - Riko</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('asset/ruang_tamu.png') no-repeat center center;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: 'Baloo 2', cursive;
+      color: white;
+    }
+
+    .game-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .character {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 85vh;
+      z-index: 1;
+    }
+
+    .dialog-box {
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.61);
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 600px;
+      z-index: 2;
+      text-align: center;
+      font-size: 1.3em;
+    }
+
+    #startBtn {
+      display: none;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background-color: #00a2ff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #000;
+      font-size: 1em;
+      text-decoration: none;
+    }
+
+    #startBtn:hover {
+      background-color: #33c5ff;
+    }
+
+    #skipBtn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(255, 254, 254, 0.2);
+      color: rgb(70, 69, 69);
+      border: 1px solid rgb(252, 252, 252);
+      padding: 6px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 3;
+      font-size: 0.9em;
+      font-style: bold;
+    }
+
+    #skipBtn:hover {
+      background-color: rgba(124, 121, 121, 0.473);
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <button id="skipBtn">Lewati</button>
+    <img src="asset/anak_laki_lesuh_1.png" alt="Riko" class="character">
+    <div class="dialog-box" id="dialogBox">
+      <p id="dialogText"></p>
+      <a href="level.html" id="startBtn">Mulai Game</a>
+    </div>
+  </div>
+
+  <script>
+    const dialogText = document.getElementById("dialogText");
+    const startBtn = document.getElementById("startBtn");
+    const skipBtn = document.getElementById("skipBtn");
+
+    const dialogs = [
+      "Hidup sehat adalah kunci agar tubuh tetap kuat melawan penyakit.",
+      "Sayangnya, Riko belum terbiasa menjaga kesehatannya. Ia sering lupa cuci tangan, jarang makan sehat, dan malas berolahraga. Akibatnya, tubuhnya melemah dan kuman jahat mulai menyerang.",
+      "Ayo, bantu Riko memulai kebiasaan sehat dan kalahkan kuman-kuman jahat itu!"
+    ];
+
+    let currentDialog = 0;
+    let charIndex = 0;
+    let typingSpeed = 50;
+    let typingInterval;
+
+    function typeDialog() {
+      if (charIndex < dialogs[currentDialog].length) {
+        dialogText.textContent += dialogs[currentDialog].charAt(charIndex);
+        charIndex++;
+        typingInterval = setTimeout(typeDialog, typingSpeed);
+      } else {
+        setTimeout(() => {
+          currentDialog++;
+          if (currentDialog < dialogs.length) {
+            dialogText.textContent = "";
+            charIndex = 0;
+            typeDialog();
+          } else {
+            showStartButton();
+          }
+        }, 1000);
+      }
+    }
+
+    function showStartButton() {
+      startBtn.style.display = "inline-block";
+    }
+
+    function skipDialog() {
+      clearTimeout(typingInterval);
+      currentDialog = dialogs.length - 1;
+      dialogText.textContent = dialogs[currentDialog];
+      showStartButton();
+    }
+
+    skipBtn.addEventListener("click", skipDialog);
+
+    typeDialog();
+  </script>
+</body>
+</html>

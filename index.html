@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fitquest</title>
+
+  <!-- Tambahkan font Baloo 2 dari Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('asset/awal.png') no-repeat center center;
+      background-size: cover;
+      font-family: 'Baloo 2', cursive;
+    }
+
+    .container {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px; /* jarak antar elemen */
+    }
+
+    .title img {
+      width: 500px;
+      animation: float 2s infinite ease-in-out; 
+    }
+  
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .start-button img {
+      width: 200px;
+      cursor: pointer;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .start-button img:hover {
+      transform: scale(1.1);
+      opacity: 0.8;
+    }
+
+    .info-button {
+      position: absolute;
+      top: 5%;
+      right: 4%;
+    }
+
+    .info-button img {
+      width: 100px;
+      cursor: pointer;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .info-button img:hover {
+      transform: scale(1.1);
+      opacity: 0.8;
+    }
+
+    /* POPUP STYLE */
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(173, 216, 230, 0.5); /* biru muda transparan */
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup-content {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 30px;
+      border-radius: 20px;
+      width: 80%;
+      max-width: 900px;
+      position: relative;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .popup-content h2 {
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    .popup-content p {
+      font-size: 18px;
+      text-align: center;
+      padding: 15px;
+      background: rgba(214, 236, 255, 0.6);
+      border-radius: 12px;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .team {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: nowrap;
+    }
+
+    .member {
+      background: rgba(245, 245, 245, 0.9);
+      padding: 15px;
+      border-radius: 12px;
+      width: 180px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      font-family: 'Baloo 2', cursive;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .member:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      background: rgb(231, 231, 231);
+    }
+
+    .member img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .member h4 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      font-size: 24px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">
+      <img src="asset/judul.png" alt="Fitquest Title">
+    </div>
+    <div class="start-button">
+      <a href="dialog1.html">
+        <img src="asset/start.png" alt="Start Button">
+      </a>
+    </div>
+    <div class="info-button">
+      <img src="asset/info.png" alt="Info Button" onclick="openPopup()">
+    </div>
+  </div>
+
+  <!-- POPUP -->
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closePopup()">&times;</span>
+      <h2 align="center">Tentang Game</h2>
+      <p>
+        Fitquest adalah game edukasi interaktif yang dirancang untuk membantu pemain memahami konsep-konsep penting melalui pengalaman bermain yang menyenangkan. Game ini menggabungkan elemen pembelajaran dengan hiburan untuk menciptakan pengalaman yang unik dan bermanfaat.
+      </p>
+      <div class="team">
+        <div class="member">
+          <img src="asset/MOHHAMAD RAFHI ARDIANZAH.JPG" alt="MOHHAMAD RAFHI ARDIANZAH">
+          <h4>Mohhamad Rafhi Ardianzah</h4>
+        </div>
+        <div class="member">
+          <img src="asset/REZA ALE RAHMAN.JPG" alt="REZA ALE RAHMAN">
+          <h4>Reza Ale Rahman</h4>
+        </div>
+        <div class="member">
+          <img src="asset/MUTIA RISNAWATI.JPG" alt="MUTIA RISNAWATI">
+          <h4>Mutia Risnawati</h4>
+        </div>
+        <div class="member">
+          <img src="asset/LAILA NABILA.JPG" alt="Laila Nabila">
+          <h4>Laila Nabila</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openPopup() {
+      document.getElementById("popup").style.display = "flex";
+    }
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+  </script>
+</body>
+</html>

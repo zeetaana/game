@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Konten Pembelajaran</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url("asset/awan.png") no-repeat center center;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: #fff;
+      padding: 8px 15px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: background 0.3s ease;
+      z-index: 20;
+    }
+    .back-btn:hover {
+      background: #ddd;
+    }
+
+    .content-wrapper {
+      position: relative;
+      width: 90%;
+      max-width: 800px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .slider {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .level-card {
+      flex: 0 0 100%;
+      text-align: center;
+      position: relative;
+    }
+
+    .level-card img {
+      max-width: 250px;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin: 0 auto 10px;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .level-card.unlocked img:hover {
+      transform: scale(1.05);
+    }
+
+    .locked img {
+      filter: grayscale(100%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .locked::after {
+      content: "🔒";
+      font-size: 40px;
+      color: #333;
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255,255,255,0.8);
+      border-radius: 50%;
+      padding: 10px;
+    }
+
+    .title {
+      font-size: 22px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .content-text {
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    .minigame-btn {
+      display: inline-block;
+      background-color: red;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .minigame-btn:hover {
+      background-color: darkred;
+    }
+    .minigame-btn[disabled] {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 45px;
+      height: 45px;
+      background-color: #fff;
+      border-radius: 50%;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      z-index: 10;
+    }
+    .nav-btn:hover {
+      transform: scale(1.1) translateY(-50%);
+    }
+    .nav-btn.left { left: 10px; }
+    .nav-btn.right { right: 10px; }
+
+    .nav-btn::before {
+      content: "";
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: solid black;
+      border-width: 0 3px 3px 0;
+    }
+    .nav-btn.left::before { transform: rotate(135deg); }
+    .nav-btn.right::before { transform: rotate(-45deg); }
+
+    @media (max-width: 500px) {
+      .level-card img { max-width: 200px; }
+      .title { font-size: 18px; }
+      .content-text { font-size: 14px; }
+    }
+
+    /* Optional: Reset button for testing */
+    .reset-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #fff;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 100;
+}
+
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-btn">⟵ Menu</a>
+
+  <div class="content-wrapper">
+    <div class="slider" id="slider">
+      <!-- Level 1 -->
+      <div class="level-card unlocked" data-level="1">
+        <img src="asset/level1.png" alt="Level 1">
+        <div class="title">Level 1 - Belajar mencuci tangan</div>
+        <div class="content-text">🧼 Ayo bantu Riko mencuci tangan agar terhindar dari kuman dan penyakit! 🦠 Setelah bermain, 
+          <br>tangannya penuh kotoran—yuk gosok pakai sabun, bilas dengan air bersih, dan jaga kebersihan supaya <br> Riko tetap sehat dan ceria! 🌟💪</div>
+          <a href="dialog2.html" class="minigame-btn">Mini Game</a>
+      </div>
+
+      <!-- Level 2 -->
+      <div class="level-card locked" data-level="2">
+        <img src="asset/level2.png" alt="Level 2">
+        <div class="title">Level 2 - Belajar makan sehat</div>
+        <div class="content-text">🥦🍎 Yuk bantu Riko memilih makanan sehat agar tubuhnya kuat dan penuh energi! 💪 Hindari jajanan sembarangan dan pilih sayur, buah, dan makanan bergizi supaya Riko bisa terus berpetualang dengan semangat! 🌈🍽️</div>
+        <a href="dialog3.html" class="minigame-btn">Mini Game</a>
+      </div>
+
+      <!-- Level 3 -->
+      <div class="level-card locked" data-level="3">
+        <img src="asset/level3.png" alt="Level 3">
+        <div class="title">Level 3 - Belajar berolahraga</div>
+        <div class="content-text">🏃‍♂️💨 Yuk bantu Riko bergerak dan berolahraga supaya tubuhnya makin sehat dan kuat! 💪 Jangan malas-malasan, ajak Riko lompat dan bermain agar jantungnya sehat dan semangatnya terus menyala! 🔥🎯</div>
+        <a href="dialog4.html" class="minigame-btn">Mini Game</a>
+      </div>
+    </div>
+
+    <div class="nav-btn left" id="left-btn"></div>
+    <div class="nav-btn right" id="right-btn"></div> 
+    </div> <!-- penutup content-wrapper -->
+    </body>
+    <button class="reset-btn" onclick="localStorage.clear(); location.reload();">🔄 Reset Progress</button>
+
+  <script>
+    const slider = document.getElementById("slider");
+    const leftBtn = document.getElementById("left-btn");
+    const rightBtn = document.getElementById("right-btn");
+    let currentIndex = 0;
+
+    leftBtn.addEventListener("click", () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+      }
+    });
+
+    rightBtn.addEventListener("click", () => {
+      if (currentIndex < slider.children.length - 1) {
+        currentIndex++;
+        slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+      }
+    });
+
+    function unlockLevel(level) {
+  const card = document.querySelector(`.level-card[data-level="${level}"]`);
+  if (card && card.classList.contains("locked")) {
+    card.classList.remove("locked");
+    card.classList.add("unlocked");
+
+    const btn = card.querySelector(".minigame-btn");
+    btn.removeAttribute("disabled");
+    btn.style.pointerEvents = "auto";
+    btn.style.opacity = "1";
+  }
+}
+
+    // Buka level berdasarkan status yang tersimpan di localStorage
+window.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("level1Completed") === "true") {
+    unlockLevel(2);
+  }
+  if (localStorage.getItem("level2Completed") === "true") {
+    unlockLevel(3);
+  }
+});
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Lompat</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+    #gameContainer {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: url("asset/bg_lapangan.png") no-repeat center center;
+      background-size: cover;
+    }
+    #player {
+      position: absolute;
+      width: 450px;
+      height: auto;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      cursor: pointer;
+      transition: bottom 0.3s;
+    }
+    /* HUD pojok kanan */
+    #hud {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px black;
+    }
+    #homeBtn {
+      position: absolute;
+      top: 15px;
+      left: 20px;
+      padding: 8px 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: #f44336;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      display: none;
+    }
+    #homeBtn:hover {
+      background: #d32f2f;
+    }
+    /* Popup container */
+    #popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-size: 22px;
+      display: none;
+      background: white;
+      padding: 25px 30px;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      width: 300px;
+    }
+    .stars {
+      font-size: 40px;
+      margin: 10px 0;
+    }
+    .gray {
+      color: gray;
+    }
+    .yellow {
+      color: gold;
+    }
+    #popup button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #4CAF50, #2E7D32);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    #popup button:hover {
+      background: linear-gradient(135deg, #66BB6A, #388E3C);
+    }
+    /* Panduan (guide) */
+    #guide {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40%;
+      padding: 25px;
+      background: rgb(255, 255, 255);
+      color: #000000;
+      text-align: center;
+      font-size: 18px;
+      border-radius: 15px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    #guide h2 {
+      margin-bottom: 15px;
+      font-size: 24px;
+      color: #000000;
+    }
+    #guide button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #4CAF50, #2E7D32);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: 0.3s;
+    }
+    #guide button:hover {
+      background: linear-gradient(135deg, #66BB6A, #388E3C);
+    }
+  </style>
+</head>
+<body>
+  <div id="gameContainer">
+    <!-- Panduan -->
+    <div id="guide">
+      <h2>Panduan Bermain</h2>
+      <p>👦 Klik anak laki-laki untuk membuatnya melompat.<br>
+      🎯 Target: 20 kali lompat dalam 10 detik.<br>
+      ⏳ Jika gagal → bintang abu-abu, coba lagi.<br>
+      ⭐ Jika berhasil → bintang kuning, bisa lanjut ke level berikutnya!</p>
+      <button onclick="startGame()">Mulai Game</button>
+    </div>
+
+    <!-- HUD -->
+    <div id="hud" style="display:none;">
+      <div id="score">Skor: 0</div>
+      <div id="time">Waktu: 10</div>
+    </div>
+
+    <!-- Home Button -->
+    <button id="homeBtn" onclick="Home()">Home</button>
+
+    <!-- Player -->
+    <img id="player" src="asset/skipingan.png" alt="player" style="display:none;">
+
+    <!-- Popup -->
+    <div id="popup"></div>
+  </div>
+
+  <script>
+    const player = document.getElementById("player");
+    const scoreDisplay = document.getElementById("score");
+    const timeDisplay = document.getElementById("time");
+    const popup = document.getElementById("popup");
+    const guide = document.getElementById("guide");
+    const hud = document.getElementById("hud");
+    const homeBtn = document.getElementById("homeBtn");
+
+    let score = 0;
+    let timeLeft = 10;
+    let jumping = false;
+    let timer;
+
+    function startGame() {
+      guide.style.display = "none";
+      hud.style.display = "block";
+      homeBtn.style.display = "block";
+      player.style.display = "block";
+
+      score = 0;
+      timeLeft = 10;
+      scoreDisplay.textContent = "Skor: " + score;
+      timeDisplay.textContent = "Waktu: " + timeLeft;
+
+      timer = setInterval(() => {
+        timeLeft--;
+        timeDisplay.textContent = "Waktu: " + timeLeft;
+        if (timeLeft <= 0) {
+          endGame();
+        }
+      }, 1000);
+    }
+
+    player.addEventListener("click", () => {
+      if (jumping) return;
+      jumping = true;
+      player.style.bottom = "150px";
+      setTimeout(() => {
+        player.style.bottom = "30px";
+        jumping = false;
+      }, 300);
+
+      score++;
+      scoreDisplay.textContent = "Skor: " + score;
+    });
+
+    function endGame() {
+      clearInterval(timer);
+      setTimeout(() => {
+        hud.style.display = "none";
+        player.style.display = "none";
+        homeBtn.style.display = "none";
+        popup.style.display = "block";
+        if (score >= 20) {
+          popup.innerHTML = `
+            <div>🎉 Kamu Menang!</div>
+            <div class="stars"><span class="yellow">★</span><span class="yellow">★</span><span class="yellow">★</span></div>
+            <button onclick="nextLevel()">Menu</button>
+            <button onclick="goHome()">Coba Lagi</button>
+          `;
+        } else {
+          popup.innerHTML = `
+            <div>😢 Kamu Kalah!</div>
+            <div class="stars"><span class="gray">★</span><span class="gray">★</span><span class="gray">★</span></div>
+            <button onclick="goHome()">Coba Lagi</button>
+          `;
+        }
+      });
+    }
+
+    function goHome() {
+      popup.style.display = "none";
+      guide.style.display = "block";
+      hud.style.display = "none";
+      player.style.display = "none";
+    //  homeBtn.style.display = "none";
+    }
+    function Home() {
+  window.location.href = "level.html"; 
+}
+
+
+    
+    function nextLevel() {
+      window.location.href = "dialog5.html";
+    }
+  </script>
+</body>
+</html>
