@@ -14,8 +14,7 @@
       align-items: center;
       height: 100vh;
     }
-       /* Tombol Home */
-       .home-btn {
+    .home-btn {
       position: fixed;
       top: 15px;
       left: 15px;
@@ -29,7 +28,6 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       transition: 0.3s;
     }
-
     .home-btn:hover {
       background-color: rgba(200, 230, 255, 1);
     }
@@ -55,7 +53,6 @@
     }
     #leftHand { left: 160px; }
     #rightHand { right: 160px; transform: scaleX(-1); }
-
     #soap {
       position: absolute;
       top: 40px;
@@ -65,7 +62,6 @@
       transition: transform 0.2s;
     }
     #soap:active { transform: scale(1.1); cursor: grabbing; }
-
     .foam {
       position: absolute;
       width: 120px;
@@ -81,7 +77,6 @@
       50% { transform: scale(1.1); opacity: 1; }
       100% { transform: scale(0.8); opacity: 0.7; }
     }
-
     .sparkle {
       position: absolute;
       width: 30px;
@@ -96,20 +91,47 @@
       50% { transform: scale(1.2); opacity: 1; }
       100% { transform: scale(0.5); opacity: 0.5; }
     }
-
-    .timer {
+    /* Progress Bar Styles */
+    .progress-container {
       position: absolute;
       bottom: 15px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(0,0,0,0.7);
-      color: #fff;
-      padding: 8px 18px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 600;
+      width: 340px;
+      height: 32px;
+      background: rgba(0,0,0,0.15);
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      overflow: hidden;
     }
-
+    .progress-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: linear-gradient(90deg, #a259e6 0%, #00b4d8 100%);
+      border-radius: 16px;
+      transition: width 0.15s linear;
+      z-index: 1;
+      width: 0%;
+    }
+    .progress-text {
+      position: relative;
+      z-index: 2;
+      color: #fff;
+      font-weight: bold;
+      font-size: 16px;
+      width: 100%;
+      text-align: center;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      letter-spacing: 0.5px;
+      pointer-events: none;
+      user-select: none;
+    }
     .popup {
       position: absolute;
       top: 50%;
@@ -138,7 +160,6 @@
       transition: background 0.3s;
     }
     .popup button:hover { background: #0096c7; }
-
     .stars {
       font-size: 28px;
       color: gold;
@@ -153,7 +174,12 @@
     <img id="rightHand" src="asset/tangan_kotor.png" class="hand" />
     <img id="soap" src="asset/sabun.png" alt="Sabun" />
 
-    <div id="timer" class="timer">Sisa waktu: 10.0 dtk</div>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div id="progressBar" class="progress-bar"></div>
+      <span id="progressText" class="progress-text">0%</span>
+    </div>
+
     <button class="home-btn" onclick="window.location.href='level.html'">Home</button>
     <!-- Popup Instruksi -->
     <div id="popupInstruksi" class="popup" style="display:block;">
@@ -161,7 +187,7 @@
       <p>
         1. Seret sabun ke tangan kiri dan kanan.<br>
         2. Gosok tangan dengan sabun hingga muncul busa.<br>
-        3. Bersihkan tangan sebelum waktu habis (10 detik).<br>
+        3. Isi progress bar sampai penuh untuk membersihkan tangan.<br>
         4. Jika berhasil, tanganmu akan bersinar bersih! 🌟
       </p>
       <button onclick="mulaiGame()">Mulai</button>
@@ -176,109 +202,6 @@
     </div>
   </div>
 
-  <script>
-    const soap = document.getElementById("soap");
-    const leftHand = document.getElementById("leftHand");
-    const rightHand = document.getElementById("rightHand");
-    const timerEl = document.getElementById("timer");
-    const popupInstruksi = document.getElementById("popupInstruksi");
-    const popupHasil = document.getElementById("popupHasil");
-
-    let timer = 10;
-    let interval = null;
-    let gameStarted = false;
-
-    function mulaiGame(){
-      popupInstruksi.style.display = "none"; 
-      startGame();
-    }
-
-    function startGame(){
-      if(gameStarted) return;
-      gameStarted = true;
-      timer = 10;
-      timerEl.innerText = `Sisa waktu: ${timer.toFixed(1)} dtk`;
-      interval = setInterval(()=>{
-        timer -= 0.1;
-        timerEl.innerText = `Sisa waktu: ${timer.toFixed(1)} dtk`;
-        if(timer <= 0){
-          clearInterval(interval);
-          cleanHands();
-        }
-      },100);
-    }
-
-    function resetGame(){
-      clearInterval(interval);
-      gameStarted = false;
-      timer = 10;
-      timerEl.innerText = `Sisa waktu: 10.0 dtk`;
-      leftHand.src = "asset/tangan_kotor.png";
-      rightHand.src = "asset/tangan_kotor.png";
-      document.querySelectorAll('.foam, .sparkle').forEach(el=>el.remove());
-      popupHasil.style.display = "none";
-      popupInstruksi.style.display = "block"; // tampilkan lagi instruksi
-    }
-
-    function cleanHands(){
-      leftHand.src = "asset/tangan_bersih.png";
-      rightHand.src = "asset/tangan_bersih.png";
-      addSparkles(leftHand);
-      addSparkles(rightHand); 
-      localStorage.setItem("level1Completed", "true");
-      setTimeout(()=>{ popupHasil.style.display = "block"; }, 2000);
-    }
-
-    function addFoam(x,y){
-      const foam = document.createElement('div');
-      foam.classList.add('foam');
-      foam.style.left = (x-60)+"px";
-      foam.style.top = (y-60)+"px";
-      document.querySelector('.game-container').appendChild(foam);
-      setTimeout(()=>foam.remove(), 1500);
-    }
-
-    function addSparkles(hand){
-      for(let i=0;i<5;i++){
-        const sparkle = document.createElement('div');
-        sparkle.classList.add('sparkle');
-        sparkle.style.left = (hand.offsetLeft+Math.random()*hand.width)+"px";
-        sparkle.style.top = (hand.offsetTop+Math.random()*hand.height)+"px";
-        document.querySelector('.game-container').appendChild(sparkle);
-        setTimeout(()=>sparkle.remove(), 2000+Math.random()*1000);
-      }
-    }
-
-    // drag sabun
-    soap.onmousedown = function(e){
-      let shiftX = e.clientX - soap.getBoundingClientRect().left;
-      let shiftY = e.clientY - soap.getBoundingClientRect().top;
-
-      function moveAt(pageX, pageY){
-        soap.style.left = pageX - shiftX - soap.parentElement.getBoundingClientRect().left + 'px';
-        soap.style.top = pageY - shiftY - soap.parentElement.getBoundingClientRect().top + 'px';
-        if(gameStarted){
-          const lh = leftHand.getBoundingClientRect();
-          const rh = rightHand.getBoundingClientRect();
-          if(pageX>lh.left && pageX<lh.right && pageY>lh.top && pageY<lh.bottom){
-            addFoam(pageX-soap.parentElement.getBoundingClientRect().left, pageY-soap.parentElement.getBoundingClientRect().top);
-          }
-          if(pageX>rh.left && pageX<rh.right && pageY>rh.top && pageY<rh.bottom){
-            addFoam(pageX-soap.parentElement.getBoundingClientRect().left, pageY-soap.parentElement.getBoundingClientRect().top);
-          }
-        }
-      }
-
-      function onMouseMove(e){ moveAt(e.pageX, e.pageY); }
-      document.addEventListener('mousemove', onMouseMove);
-
-      document.onmouseup = function(){
-        document.removeEventListener('mousemove', onMouseMove);
-        document.onmouseup = null;
-      };
-    };
-    soap.ondragstart = () => false;
-    
-  </script>
+  <script src="level.js"></script>
 </body>
 </html>
