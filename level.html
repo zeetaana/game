@@ -31,9 +31,7 @@
       transition: background 0.3s ease;
       z-index: 20;
     }
-    .back-btn:hover {
-      background: #ddd;
-    }
+    .back-btn:hover { background: #ddd; }
 
     .content-wrapper {
       position: relative;
@@ -69,9 +67,7 @@
       transition: transform 0.3s ease;
     }
 
-    .level-card.unlocked img:hover {
-      transform: scale(1.05);
-    }
+    .level-card.unlocked img:hover { transform: scale(1.05); }
 
     .locked img {
       filter: grayscale(100%);
@@ -114,9 +110,7 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-    .minigame-btn:hover {
-      background-color: darkred;
-    }
+    .minigame-btn:hover { background-color: darkred; }
     .minigame-btn[disabled] {
       pointer-events: none;
       opacity: 0.5;
@@ -138,9 +132,7 @@
       transition: transform 0.3s ease;
       z-index: 10;
     }
-    .nav-btn:hover {
-      transform: scale(1.1) translateY(-50%);
-    }
+    .nav-btn:hover { transform: scale(1.1) translateY(-50%); }
     .nav-btn.left { left: 10px; }
     .nav-btn.right { right: 10px; }
 
@@ -161,20 +153,18 @@
       .content-text { font-size: 14px; }
     }
 
-    /* Optional: Reset button for testing */
     .reset-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #fff;
-  padding: 8px 14px;
-  border-radius: 10px;
-  font-size: 14px;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  z-index: 100;
-}
-
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #fff;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      z-index: 100;
+    }
   </style>
 </head>
 <body>
@@ -186,33 +176,32 @@
       <div class="level-card unlocked" data-level="1">
         <img src="asset/level1.png" alt="Level 1">
         <div class="title">Level 1 - Belajar mencuci tangan</div>
-        <div class="content-text">🧼 Ayo bantu Riko mencuci tangan agar terhindar dari kuman dan penyakit! 🦠 Setelah bermain, 
-          <br>tangannya penuh kotoran—yuk gosok pakai sabun, bilas dengan air bersih, dan jaga kebersihan supaya <br> Riko tetap sehat dan ceria! 🌟💪</div>
-          <a href="dialog2.html" class="minigame-btn">Mini Game</a>
+        <div class="content-text">🧼 Ayo bantu Riko mencuci tangan agar terhindar dari kuman dan penyakit!...</div>
+        <a href="dialog2.html" class="minigame-btn">Mini Game</a>
       </div>
 
       <!-- Level 2 -->
       <div class="level-card locked" data-level="2">
         <img src="asset/level2.png" alt="Level 2">
         <div class="title">Level 2 - Belajar makan sehat</div>
-        <div class="content-text">🥦🍎 Yuk bantu Riko memilih makanan sehat agar tubuhnya kuat dan penuh energi! 💪 Hindari jajanan sembarangan dan pilih sayur, buah, dan makanan bergizi supaya Riko bisa terus berpetualang dengan semangat! 🌈🍽️</div>
-        <a href="dialog3.html" class="minigame-btn">Mini Game</a>
+        <div class="content-text">🥦🍎 Yuk bantu Riko memilih makanan sehat...</div>
+        <a href="dialog3.html" class="minigame-btn" disabled>Mini Game</a>
       </div>
 
       <!-- Level 3 -->
       <div class="level-card locked" data-level="3">
         <img src="asset/level3.png" alt="Level 3">
         <div class="title">Level 3 - Belajar berolahraga</div>
-        <div class="content-text">🏃‍♂️💨 Yuk bantu Riko bergerak dan berolahraga supaya tubuhnya makin sehat dan kuat! 💪 Jangan malas-malasan, ajak Riko lompat dan bermain agar jantungnya sehat dan semangatnya terus menyala! 🔥🎯</div>
-        <a href="dialog4.html" class="minigame-btn">Mini Game</a>
+        <div class="content-text">🏃‍♂️💨 Yuk bantu Riko bergerak dan berolahraga...</div>
+        <a href="dialog4.html" class="minigame-btn" disabled>Mini Game</a>
       </div>
     </div>
 
     <div class="nav-btn left" id="left-btn"></div>
-    <div class="nav-btn right" id="right-btn"></div> 
-    </div> <!-- penutup content-wrapper -->
-    </body>
-    <button class="reset-btn" onclick="localStorage.clear(); location.reload();">🔄 Reset Progress</button>
+    <div class="nav-btn right" id="right-btn"></div>
+  </div>
+
+  <button class="reset-btn" onclick="localStorage.clear(); location.reload();">🔄 Reset Progress</button>
 
   <script>
     const slider = document.getElementById("slider");
@@ -235,28 +224,33 @@
     });
 
     function unlockLevel(level) {
-  const card = document.querySelector(`.level-card[data-level="${level}"]`);
-  if (card && card.classList.contains("locked")) {
-    card.classList.remove("locked");
-    card.classList.add("unlocked");
+      const card = document.querySelector(`.level-card[data-level="${level}"]`);
+      if (card && card.classList.contains("locked")) {
+        card.classList.remove("locked");
+        card.classList.add("unlocked");
 
-    const btn = card.querySelector(".minigame-btn");
-    btn.removeAttribute("disabled");
-    btn.style.pointerEvents = "auto";
-    btn.style.opacity = "1";
-  }
-}
+        const btn = card.querySelector(".minigame-btn");
+        btn.removeAttribute("disabled");
+        btn.style.pointerEvents = "auto";
+        btn.style.opacity = "1";
+      }
+    }
 
-    // Buka level berdasarkan status yang tersimpan di localStorage
-window.addEventListener("DOMContentLoaded", () => {
-  if (localStorage.getItem("level1Completed") === "true") {
-    unlockLevel(2);
-  }
-  if (localStorage.getItem("level2Completed") === "true") {
-    unlockLevel(3);
-  }
-});
+    // Saat halaman load, kunci semua level terkunci
+    window.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".level-card.locked .minigame-btn").forEach(btn => {
+        btn.setAttribute("disabled", true);
+        btn.style.pointerEvents = "none";
+        btn.style.opacity = "0.5";
+      });
 
+      if (localStorage.getItem("level1Completed") === "true") {
+        unlockLevel(2);
+      }
+      if (localStorage.getItem("level2Completed") === "true") {
+        unlockLevel(3);
+      }
+    });
   </script>
 </body>
 </html>

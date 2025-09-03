@@ -53,7 +53,7 @@
     }
     #boy {
       position: absolute;
-      top: 50px;
+      top: 150px;
       left: 50%;
       transform: translateX(-50%);
       width: 500px;
@@ -61,24 +61,27 @@
     }
     #table {
       position: absolute;
-      top: 400px;
+      top: 430px;
       left: 50%;
       transform: translateX(-50%);
       width: 800px;
       z-index: 10;
     }
-    /* Tray makanan */
+
+    /* Tray makanan di atas meja */
     #foodTray {
-      position: absolute;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 20px;
-      width: 320px;
-      overflow: hidden;
-      z-index: 15;
-    }
+  position: absolute;
+  top: 495px; /* turunkan agar pas di atas meja */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  width: 320px;
+  overflow: hidden;
+  z-index: 20;
+  justify-content: center;
+}
+
     .food {
       width: 90px;
       height: 90px;
@@ -86,20 +89,32 @@
       user-select: none;
       flex-shrink: 0;
     }
-    #trayControls {
-      position: absolute;
-      bottom: 120px;
-      width: 100%;
-      text-align: center;
-      z-index: 16;
-    }
-    #trayControls button {
-      margin: 0 250px;
-      padding: 5px 10px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+
+    /* Tombol navigasi tray */
+#trayControls {
+  position: absolute;
+  top: 430px; /* sejajarkan dengan atas meja */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px; /* samakan dengan lebar meja */
+  display: flex;
+  justify-content: space-between; /* ⬅ kiri, ➡ kanan */
+  z-index: 25;
+  pointer-events: none; /* biar area transparan ga ganggu */
+}
+
+#trayControls button {
+  pointer-events: auto; /* tombol tetap bisa diklik */
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
     #popup {
       display: none;
       position: absolute;
@@ -313,8 +328,7 @@
   document.getElementById("nextBtn").onclick = () => {
     window.location.href = "level.html";
   };
-  </script>
-  
+</script>
 
 </body>
 </html>
