@@ -85,11 +85,32 @@
     #skipBtn:hover {
       background-color: rgba(124, 121, 121, 0.473);
     }
+
+    /* Tombol musik */
+    #musicBtn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid white;
+      padding: 6px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 3;
+      font-size: 0.9em;
+    }
+
+    #musicBtn:hover {
+      background-color: rgba(255, 255, 255, 0.4);
+    }
   </style>
 </head>
 <body>
   <div class="game-container">
     <button id="skipBtn">Lewati</button>
+    <button id="musicBtn">🔊 Musik</button>
+
     <img src="asset/anak_laki_lesuh_1.png" alt="Riko" class="character">
     <div class="dialog-box" id="dialogBox">
       <p id="dialogText"></p>
@@ -97,16 +118,23 @@
     </div>
   </div>
 
+  <!-- Musik -->
+  <audio id="bgMusic" loop>
+    <source src="asset/musik/dialog.mp3" type="audio/mpeg">
+    Browser kamu tidak mendukung audio.
+  </audio>
+
   <script>
     const dialogText = document.getElementById("dialogText");
     const startBtn = document.getElementById("startBtn");
     const skipBtn = document.getElementById("skipBtn");
+    const musicBtn = document.getElementById("musicBtn");
+    const bgMusic = document.getElementById("bgMusic");
 
     const dialogs = [
-    "Tanganmu penuh dengan kuman setelah memegang benda kotor",
-    "Jika tidak dibersihkan, kuman bisa masuk ke tubuhmu dan membuatmu sakit",
-    "Cepat! Cuci tanganmu dengan benar. Gosok, bilas, dan singkirkan semua kuman nakal itu!"
-
+      "Tanganmu penuh dengan kuman setelah memegang benda kotor",
+      "Jika tidak dibersihkan, kuman bisa masuk ke tubuhmu dan membuatmu sakit",
+      "Cepat! Cuci tanganmu dengan benar. Gosok, bilas, dan singkirkan semua kuman nakal itu!"
     ];
 
     let currentDialog = 0;
@@ -145,6 +173,24 @@
     }
 
     skipBtn.addEventListener("click", skipDialog);
+
+    // Musik control
+    musicBtn.addEventListener("click", () => {
+      if (bgMusic.paused) {
+        bgMusic.play();
+        musicBtn.textContent = "🔊 Musik";
+      } else {
+        bgMusic.pause();
+        musicBtn.textContent = "🔇 Diam";
+      }
+    });
+
+    // Autoplay setelah klik pertama
+    document.body.addEventListener("click", () => {
+      if (bgMusic.paused) {
+        bgMusic.play().catch(() => {});
+      }
+    }, { once: true });
 
     typeDialog();
   </script>
